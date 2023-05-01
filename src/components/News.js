@@ -16,15 +16,15 @@ export class News extends Component {
     }
     // componentDidMount runs after render method runs ,in this case used to update all news articles
     async componentDidMount(){
-      let url = "https://newsapi.org/v2/top-headlines?country=in&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=1";
+      let url = "https://newsapi.org/v2/top-headlines?country=in&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=1&pageSize=20";
       let data = await fetch(url);// fetch api takes url and return promise
       let parsedData = await data.json();
       console.log(parsedData);
-      this.setState({articles: parsedData.articles})//properties cannot be null we have to deal with it
+      this.setState({articles: parsedData.articles, totalResults:parsedData.totalResults})//properties cannot be null we have to deal with it
     }
      handlePrevClick = async ()=>{
         console.log("Prev")
-        let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=${this.state.page - 1}`;
+        let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=${this.state.page - 1}&pageSize=20`;
         let data = await fetch(url);// fetch api takes url and return promise
         let parsedData = await data.json();
         console.log(parsedData);
@@ -34,12 +34,19 @@ export class News extends Component {
       
       handleNextClick = async ()=>{
       console.log("Next")
-      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=${this.state.page + 1}`;
-      let data = await fetch(url);// fetch api takes url and return promise
-      let parsedData = await data.json();
-      console.log(parsedData);
-      this.setState({articles: parsedData.articles,
-        page: this.state.page + 1})
+      if(this.state.page + 1 > Math.ceil(this.state.totalResults/20)){
+
+      }
+      else{
+
+            let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=${this.state.page + 1}&pageSize=20`;
+            let data = await fetch(url);// fetch api takes url and return promise
+            let parsedData = await data.json();
+            console.log(parsedData);
+            this.setState({page: this.state.page + 1,
+              articles: parsedData.articles,
+              })
+      }
     }
   render() {
       //to iterate use map and map return something here it is returing div so unique id=key is in div
