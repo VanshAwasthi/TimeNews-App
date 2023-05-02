@@ -6,7 +6,7 @@ export class NewsItem extends Component {
     let {title , description, imageUrl ,newsUrl} = this.props;//yha destructuring horhi hai this.props ek object hai aur usme se title aur discription pull karke la rhe hai
     return (
       <div className="my-3">
-        <div className="card" style={{width: "18rem"}}>
+        <div className="card" >
             <img src={!imageUrl?"https://images.hindustantimes.com/tech/img/2023/04/30/1600x900/asteroid-4369511_1920_Pixabay_1682824505795_1682824517645.jpg":imageUrl} className="card-img-top" alt="..."/>
             <div className="card-body">
                 <h5 className="card-title">{title}</h5>

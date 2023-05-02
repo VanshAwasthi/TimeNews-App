@@ -1,9 +1,22 @@
 import React, { Component } from 'react'
 import NewsItem from './NewsItem'
 import Spinner from './Spinner';
+import PropTypes from 'prop-types'
 
 export class News extends Component {
 
+
+  static deafaultProps = {
+    country: "in",
+    pageSize: 8,
+    category: "general"
+
+  };
+  static propTypes = {
+    country: PropTypes.string,
+    pageSize: PropTypes.number,
+    category: PropTypes.string
+  };
 // props pass karke aap state ko set kar skte ho aur fir state ko change kar skte ho lekin props ko change nhi kar skte ho(props are only read only)
 // state is used when you change variable again and again without loading the page
     constructor(){
@@ -17,7 +30,7 @@ export class News extends Component {
     }
     // componentDidMount runs after render method runs ,in this case used to update all news articles
     async componentDidMount(){
-      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=1&pageSize=${this.props.pageSize}`;
+      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=1&pageSize=${this.props.pageSize}`;
       this.setState({loading: true});
       let data = await fetch(url);// fetch api takes url and return promise
       let parsedData = await data.json();
@@ -28,7 +41,7 @@ export class News extends Component {
     }
      handlePrevClick = async ()=>{
         console.log("Prev")
-        let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
         this.setState({loading: true});
         let data = await fetch(url);// fetch api takes url and return promise
         let parsedData = await data.json();
@@ -41,7 +54,7 @@ export class News extends Component {
       console.log("Next")
       if(!(this.state.page + 1 > Math.ceil(this.state.totalResults/this.props.pageSize))){
 
-            let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+            let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
             this.setState({loading: true});
             let data = await fetch(url);// fetch api takes url and return promise
             let parsedData = await data.json();
@@ -55,7 +68,7 @@ export class News extends Component {
       //to iterate use map and map return something here it is returing div so unique id=key is in div
     return (
       <div className='container my-3 '>
-        <div className="text-center"><h1>TimeNews - Top Headline</h1></div>
+        <div className="text-center" style={{margin:'35px 0px'}}><h1>TimeNews - Top Headline</h1></div>
         {this.state.loading && <Spinner/>}
         <div className="row">
         {!this.state.loading && this.state.articles.map((element)=>{
