@@ -17,16 +17,19 @@ export class News extends Component {
     pageSize: PropTypes.number,
     category: PropTypes.string
   };
+  capitalizeFirstLetter = (string)=>{
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 // props pass karke aap state ko set kar skte ho aur fir state ko change kar skte ho lekin props ko change nhi kar skte ho(props are only read only)
 // state is used when you change variable again and again without loading the page
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
             articles: [],
             loading: false,
             page:1
-
         }
+        document.title=`${this.capitalizeFirstLetter(this.props.category)} - TimeNews`;
     }
 //Code refactoring ki hai isleye code commented hai handlePrevClick aur handleNextClick ka
     async updateNews(){
@@ -84,7 +87,7 @@ export class News extends Component {
       //to iterate use map and map return something here it is returing div so unique id=key is in div
     return (
       <div className='container my-3 '>
-        <div className="text-center" style={{margin:'35px 0px'}}><h1>TimeNews - Top Headline</h1></div>
+        <div className="text-center" style={{margin:'35px 0px'}}><h1>TimeNews - Top {this.capitalizeFirstLetter(this.props.category)} Headlines</h1></div>
         {this.state.loading && <Spinner/>}
         <div className="row">
         {!this.state.loading && this.state.articles.map((element)=>{
