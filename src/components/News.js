@@ -35,15 +35,19 @@ export class News extends Component {
     }
 //Code refactoring ki hai isleye code commented hai handlePrevClick aur handleNextClick ka
     async updateNews(){
-      const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+      this.props.setProgress(10);
+      const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
       this.setState({loading: true});
       let data = await fetch(url);// fetch api takes url and return promise
+      this.props.setProgress(30);
       let parsedData = await data.json();
+      this.props.setProgress(70);
       // console.log(parsedData);
       this.setState({articles: parsedData.articles, 
         totalResults:parsedData.totalResults,
         loading: false})//properties cannot be null we have to deal with it
-    }
+        this.props.setProgress(100);
+      }
     // componentDidMount runs after render method runs ,in this case used to update all news articles
     async componentDidMount(){
       // let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=1&pageSize=${this.props.pageSize}`;
@@ -85,9 +89,11 @@ export class News extends Component {
       this.setState({page: this.state.page + 1});
       this.updateNews();//this. isleye kyo ki ham class ke andar hai
     }
+
+    //fetchMoreData is for infinite loading
     fetchMoreData = async () => {
         this.setState({page: this.state.page +1});
-        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=d5a0ea757b884e8bb0bfebe698fc1d07&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         let data = await fetch(url);// fetch api takes url and return promise
         let parsedData = await data.json();
         // console.log(parsedData);
@@ -100,7 +106,7 @@ export class News extends Component {
     return (
       <>
         <div className="text-center" style={{margin:'35px 0px'}}><h1>TimeNews - Top {this.capitalizeFirstLetter(this.props.category)} Headlines</h1></div>
-        {this.state.loading && <Spinner/>}
+        {this.state.loading && <Spinner/>}  
         <InfiniteScroll
           dataLength={this.state.articles.length}
           next={this.fetchMoreData}
