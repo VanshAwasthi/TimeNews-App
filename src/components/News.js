@@ -9,9 +9,7 @@ const News = (props) => {
   const [loading, setLoading] = useState([true]);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  // document.title = `${capitalizeFirstLetter(
-  //   props.category
-  // )} - TimeNews`;
+ 
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -37,7 +35,9 @@ const News = (props) => {
   };
 
   useEffect(() => {
+    document.title = `${capitalizeFirstLetter( props.category)} - TimeNews`;
     updateNews();
+    /* eslint-disable */ 
   }, []);
 
   // const handlePrevClick = async () => {
@@ -72,8 +72,8 @@ const News = (props) => {
 
   //fetchMoreData is for infinite loading
   const fetchMoreData = async () => {
+    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page+1}&pageSize=${props.pageSize}`;
     setPage(page + 1);
-    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
     let data = await fetch(url); // fetch api takes url and return promise
     let parsedData = await data.json();
     // console.log(parsedData);
@@ -83,7 +83,7 @@ const News = (props) => {
   //to iterate use map and map return something here it is returing div so unique id=key is in div
   return (
     <>
-      <div className="text-center" style={{ margin: "35px 0px" }}>
+      <div className="text-center" style={{ margin: "35px 0px" , marginTop:"90px"}}>
         <h1>
           TimeNews - Top {capitalizeFirstLetter(props.category)} Headlines
         </h1>
